@@ -1,3 +1,5 @@
 /.venv
 /__pycache__
 /temp.html
+/testing.py
+/wod.json
