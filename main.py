@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import requests
 import json
 # import datetime
-# from helper import get_wod_oed, get_wod_mw, get_wod_dict
+from helper import get_wod_oed, get_wod_mw, get_wod_dict
 
 app = FastAPI()
 
