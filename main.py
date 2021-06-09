@@ -1,69 +1,65 @@
-# from deta import App
+from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from fastapi import FastAPI
+
 from bs4 import BeautifulSoup
 import requests
-import json
-# import datetime
+
 from helper import get_wod_oed, get_wod_mw, get_wod_dict
 
-app = FastAPI()
 
+app = FastAPI()
 
 sources = ["https://www.oed.com/", "https://www.merriam-webster.com/word-of-the-day",
            "https://www.dictionary.com/e/word-of-the-day/", "https://www.thesaurus.com/e/synonym-of-the-day/"]
 
-# word_list = []
-# word_list.append(get_wod_oed(sources[0]))
-# word_list.append(get_wod_mw(sources[1]))
-# word_list.append(get_wod_dict(sources[2]))
-# print(word_list)
-
 
 @app.get("/")
 def hello():
-    return {'response': 'hello welcome to woday'}
+    return {'response': 'hello welcome to woday, to get started, checkout /docs endpoint'}
 
 
-@app.get("/all")
+@app.get("/1")
 def main():
-    # word_dict = dict()
-    # today = str(datetime.date.today())
-    word_dict = []
-
-    # print("Gathering resources...")
-
     # * get oed word
-    word_dict.append(get_wod_oed(sources[0]))
-
-    # * get merriam-webster wod
-    word_dict.append(get_wod_mw(sources[1]))
-
-    # * get dictionary.com wod
-    word_dict.append(get_wod_dict(sources[2]))
+    word_dict = get_wod_oed(sources[0])
 
     word_dict = jsonable_encoder(word_dict)
     return JSONResponse(content=word_dict)
 
-    # return {'response': 'Server is now Ready'}
 
-    # with open("wod.json", "a") as jfile:
-    #     print(word_dict)
-    #     json.dump(word_dict, jfile, indent=4)
+@app.get("/2")
+def main():
+    # * get merriam-webster wod
+    word_dict = get_wod_mw(sources[1])
+
+    word_dict = jsonable_encoder(word_dict)
+    return JSONResponse(content=word_dict)
 
 
-if __name__ == "__main__":
-    main()
+@app.get("/3")
+def main():
+    # * get dictionary.com wod
+    word_dict = get_wod_dict(sources[2])
 
-# main_page = requests.get(sources[1])
-# soup = BeautifulSoup(main_page.content, 'html.parser')
-# temp = open("temp.html",'w')
-# temp.write(soup.prettify())
+    word_dict = jsonable_encoder(word_dict)
+    return JSONResponse(content=word_dict)
 
-# temp = open("temp.html")
-# soup = BeautifulSoup(temp, 'html.parser')
-# word = soup.find_all('h1')[0].text
-# def_req = requests.get(sources[1] + 'dictionary/' + word)
+# async def main():
+#     async with aiohttp.ClientSession() as session:
+#         tasks = []
+#         word1 = asyncio.ensure_future(get_wod_oed(session, sources[0]))
+#         word2 = asyncio.ensure_future(get_wod_mw(session, sources[1]))
+#         word3 = asyncio.ensure_future(get_wod_mw(session, sources[2]))
 
-# print(word)
+#         tasks = [word1, word2, word3]
+
+#     words = await asyncio.gather(*tasks)
+
+#     word_dict = jsonable_encoder(words)
+#     return JSONResponse(content=word_dict)
+
+
+# @app.get('/all')
+# def get_all():
+#     return asyncio.run(main())
