@@ -4,8 +4,9 @@ import re
 
 word_pattern = r'\S+'
 
+
 def get_wod_oed_link(source):
-    print("Getting wod link from oed...")
+    # print("Getting wod link from oed...")
     main_page = requests.get(source)
     soup = BeautifulSoup(main_page.content, 'html.parser')
 
@@ -14,10 +15,11 @@ def get_wod_oed_link(source):
 
     return link
 
+
 def get_wod_oed(source):
     link = get_wod_oed_link(source)
 
-    print("Getting oed word definition...")
+    # print("Getting oed word definition...")
     main_page = requests.get(link)
     soup = BeautifulSoup(main_page.content, 'html.parser')
 
@@ -29,17 +31,18 @@ def get_wod_oed(source):
 
     d = {
         "source": "OED",
-        "link": link, 
+        "link": link,
         "word": word,
         "definition": definition
     }
 
-    print("Gathered WOD from OED: success")
+    # print("Gathered WOD from OED: success")
 
     return d
 
+
 def get_wod_mw(source):
-    print('Getting wod from mw...')
+    # print('Getting wod from mw...')
     main_page = requests.get(source)
     soup = BeautifulSoup(main_page.content, 'html.parser')
 
@@ -49,7 +52,7 @@ def get_wod_mw(source):
     # print(word)
     # print(link)
 
-    print("Getting mw definition of WOD...")
+    # print("Getting mw definition of WOD...")
 
     word_page = requests.get(link)
     soup = BeautifulSoup(word_page.content, 'html.parser')
@@ -64,17 +67,18 @@ def get_wod_mw(source):
 
     d = {
         "source": "MW",
-        "link": link, 
+        "link": link,
         "word": word,
         "definition": definition
     }
-    
-    print("Gathered WOD from MW: success")
+
+    # print("Gathered WOD from MW: success")
 
     return d
 
+
 def get_wod_dict(source):
-    print('Getting wod from dictionary.com...')
+    # print('Getting wod from dictionary.com...')
 
     main_page = requests.get(source)
     soup = BeautifulSoup(main_page.content, 'html.parser')
@@ -82,7 +86,7 @@ def get_wod_dict(source):
     word = soup.find_all('div', class_="otd-item-headword__word")[0].text
     word = " ".join(re.findall(word_pattern, word))
 
-    print("Getting dictionary.com word definition...")
+    # print("Getting dictionary.com word definition...")
     definition = soup.find_all('div', class_="otd-item-headword__pos")[0]
     definition = definition.contents[-2].text
 
@@ -95,6 +99,6 @@ def get_wod_dict(source):
         "definition": definition
     }
 
-    print("Gathered WOD from dictionary.com: success")
+    # print("Gathered WOD from dictionary.com: success")
 
     return d
